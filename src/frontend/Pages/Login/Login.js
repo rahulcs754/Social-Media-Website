@@ -17,7 +17,7 @@ export const Login = () => {
   useEffect(() => {
     if (isLogged) {
       toast.success("You have successfully logged in");
-      navigate("/");
+      navigate("/homepage");
     }
 
     if (status === STATUSES.ERROR) {

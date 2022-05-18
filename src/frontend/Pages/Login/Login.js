@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { loginCheck, STATUSES } from "../../../store/authSlice";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { FaUserFriends } from "react-icons/fa";
 import * as Yup from "yup";
 
 export const Login = () => {
@@ -56,7 +57,9 @@ export const Login = () => {
           <div>
             <div className="row mb-5">
               <div className="col-lg-12 text-center">
-                <h1 className="mt-5">Login Form</h1>
+                <h1 className="space-between text-center mr-s ml-s">
+                  Connect <FaUserFriends className="friend_icons" />
+                </h1>
               </div>
             </div>
             <Form className={styles.login_form}>

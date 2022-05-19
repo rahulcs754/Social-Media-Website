@@ -1,0 +1,15 @@
+.header_update {
+  border: none;
+  box-shadow: 0px 0px 1px 0px var(--light-black);
+  border-radius: 0;
+  align-items: center;
+  background: unset;
+}
+
+.dark .header_update {
+  box-shadow: 0px 0px 1px 0px var(--white-mint);
+}
+
+.header_nav_reset {
+  align-items: center;
+}

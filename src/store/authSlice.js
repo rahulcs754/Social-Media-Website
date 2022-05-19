@@ -50,7 +50,15 @@ const authSlice = createSlice({
     isLogged: false,
     isRegisterd: false,
   },
-  reducers: {},
+  reducers: {
+    logout(state, action) {
+      state.data = { user: {}, userToken: "" };
+      state.message = "";
+      state.isLogged = false;
+      state.isRegisterd = false;
+      state.status = STATUSES.IDLE;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginCheck.pending, (state, action) => {
@@ -58,7 +66,6 @@ const authSlice = createSlice({
         state.message = "";
       })
       .addCase(loginCheck.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.data.user = action.payload.foundUser;
         state.data.userToken = action.payload.encodedToken;
         state.status = STATUSES.IDLE;
@@ -81,14 +88,18 @@ const authSlice = createSlice({
         state.status = STATUSES.IDLE;
         state.message = "";
         state.isRegisterd = true;
+        state.isLogged = true;
       })
       .addCase(SignupUser.rejected, (state, action) => {
         state.registerStatus = STATUSES.ERROR;
         state.regMessage = "Incorrect login or password!";
         state.regData = {};
         state.isRegisterd = false;
+        state.isLogged = false;
       });
   },
 });
+
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

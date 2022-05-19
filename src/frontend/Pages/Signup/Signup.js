@@ -60,8 +60,6 @@ export const SignupForm = () => {
             password,
           };
           dispatch(SignupUser(passObject));
-          // const userCredentail = { username: email, password };
-          //dispatch(loginCheck(userCredentail));
         }}
       >
         {({ touched, errors }) => (

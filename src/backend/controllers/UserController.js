@@ -22,7 +22,7 @@ export const getAllUsersHandler = function () {
 export const getUserHandler = function (schema, request) {
   const userId = request.params.userId;
   try {
-    const user = schema.users.findBy({ _id: userId }).attrs;
+    const user = schema.users.findBy({ username: userId }).attrs;
     return new Response(200, {}, { user });
   } catch (error) {
     return new Response(
@@ -242,7 +242,7 @@ export const followUserHandler = function (schema, request) {
     return new Response(
       200,
       {},
-      { user: updatedUser, followUser: updatedFollowUser }
+      { user: updatedUser, allUsers: this.db.users }
     );
   } catch (error) {
     return new Response(
@@ -307,7 +307,7 @@ export const unfollowUserHandler = function (schema, request) {
     return new Response(
       200,
       {},
-      { user: updatedUser, followUser: updatedFollowUser }
+      { user: updatedUser, allUsers: this.db.users }
     );
   } catch (error) {
     return new Response(

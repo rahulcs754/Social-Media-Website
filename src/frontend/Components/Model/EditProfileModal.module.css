@@ -1,0 +1,22 @@
+.input_fields {
+  width: 100%;
+  padding: 0.5rem;
+  color: var(--dark-black);
+  border-radius: 8px;
+  border: 1px solid var(--light-black);
+}
+
+.input_footer {
+  border-radius: 0px 0px 5px 5px;
+  color: #fff;
+  padding: 0.5rem;
+  justify-content: space-between;
+  margin: 0 auto;
+  background-color: var(--var-blue);
+}
+
+.right_footer {
+  flex-basis: 50%;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
+}

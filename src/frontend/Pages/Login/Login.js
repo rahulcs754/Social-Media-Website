@@ -28,7 +28,7 @@ export const Login = () => {
   //set default entry for login
   const handlerGuestEntry = () => {
     const userCredentail = {
-      username: "rahul@gmail.com",
+      username: "rahul",
       password: "test123",
     };
     dispatch(loginCheck(userCredentail));

@@ -1,4 +1,4 @@
-import { Login, NoPageFound, SignupForm, Homepage } from "../Pages";
+import { Login, NoPageFound, SignupForm, Homepage, Profile } from "../Pages";
 import MockAPI from "../mock-api";
 import { PrivateRoute } from "../Components";
 import { Routes, Route } from "react-router-dom";
@@ -13,6 +13,14 @@ const Routespaths = () => {
         element={
           <PrivateRoute>
             <Homepage />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/profile"
+        element={
+          <PrivateRoute>
+            <Profile />
           </PrivateRoute>
         }
       ></Route>

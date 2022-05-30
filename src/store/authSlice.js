@@ -41,6 +41,54 @@ export const SignupUser = createAsyncThunk(
   }
 );
 
+/* code for bookmark, follow */
+
+export const getAllBookmark = createAsyncThunk(
+  "getallBookmark",
+  async ({ authorization }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/users/bookmark", {
+        headers: { authorization },
+      });
+      return response;
+    } catch (err) {
+      rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const addBookmark = createAsyncThunk(
+  "addBookmark",
+  async ({ postId, authorization }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `/api/users/bookmark/${postId}`,
+        {},
+        { headers: { authorization } }
+      );
+      return response.data.bookmarks;
+    } catch (err) {
+      rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const removeBookmark = createAsyncThunk(
+  "removeBookmark",
+  async ({ postId, authorization }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `/api/users/remove-bookmark/${postId}`,
+        {},
+        { headers: { authorization } }
+      );
+      return response.data.bookmarks;
+    } catch (err) {
+      rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -68,6 +116,7 @@ const authSlice = createSlice({
       .addCase(loginCheck.fulfilled, (state, action) => {
         state.data.user = action.payload.foundUser;
         state.data.userToken = action.payload.encodedToken;
+        delete action.payload.foundUser.password;
         state.status = STATUSES.IDLE;
         state.message = "";
         state.isLogged = true;
@@ -96,6 +145,40 @@ const authSlice = createSlice({
         state.regData = {};
         state.isRegisterd = false;
         state.isLogged = false;
+      })
+      .addCase(addBookmark.pending, (state, action) => {
+        state.status = STATUSES.LOADING;
+        state.message = "";
+        state.loading = true;
+      })
+      .addCase(addBookmark.fulfilled, (state, action) => {
+        state.data.user.bookmarks = action.payload;
+        state.status = STATUSES.IDLE;
+        state.message = "";
+        state.loading = false;
+      })
+      .addCase(addBookmark.rejected, (state, action) => {
+        state.status = STATUSES.ERROR;
+        state.message = "Oops Something went wrong";
+        state.users = [];
+        state.loading = false;
+      })
+      .addCase(removeBookmark.pending, (state, action) => {
+        state.status = STATUSES.LOADING;
+        state.message = "";
+        state.loading = true;
+      })
+      .addCase(removeBookmark.fulfilled, (state, action) => {
+        state.data.user.bookmarks = action.payload;
+        state.status = STATUSES.IDLE;
+        state.message = "";
+        state.loading = false;
+      })
+      .addCase(removeBookmark.rejected, (state, action) => {
+        state.status = STATUSES.ERROR;
+        state.message = "Oops Something went wrong";
+        state.users = [];
+        state.loading = false;
       });
   },
 });

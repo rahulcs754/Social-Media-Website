@@ -31,15 +31,11 @@ export const Follow = () => {
         </div>
 
         <div className={`flex flex-column mt-xs ${styles.follow_user_list} `}>
-          {loading ? (
-            <>Loading ...</>
-          ) : (
-            users
-              .filter((item) => item._id !== liveId)
-              .map((details) => {
-                return <FollowCard user={details} key={details._id} />;
-              })
-          )}
+          {users
+            ?.filter((item) => item._id !== liveId)
+            .map((details) => {
+              return <FollowCard user={details} key={details._id} />;
+            })}
         </div>
       </div>
     </div>

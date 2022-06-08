@@ -21,3 +21,17 @@
   border-radius: 8px;
   color: var(--mint-white);
 }
+
+.profile_img {
+  position: relative;
+}
+
+.profile_icon_edit {
+  position: absolute;
+  bottom: 3px;
+  right: -5px;
+}
+
+.profile_input_img {
+  display: none;
+}

@@ -13,35 +13,33 @@ import {
   MdDeleteOutline,
   MdEdit,
   MdBookmarkRemove,
+  MdBookmarkBorder,
 } from "react-icons/md";
+
+const getSingleUser = (_id) => {
+  try {
+    const res = getUserById(_id);
+    setUserDetails(res?.data?.user);
+  } catch (err) {
+    toast.warning(err);
+  }
+};
 
 export const Post = (item) => {
   const dispatch = useDispatch();
   const { _id, content, username, createdAt } = item;
-  const [userDetails, setUserDetails] = useState({});
   const [postMenu, setPostMenu] = useState(false);
   const [editmodal, setEditModal] = useState(false);
 
   const {
     data: { user: live, userToken },
-    token,
   } = useSelector((store) => store.auth);
+  const { users } = useSelector((store) => store.users);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        console.log("usernameprinte", username);
-        const res = await getUserById(username);
+  const postUser = users.find((item) => item.username === username);
 
-        setUserDetails(res?.data?.user);
-      } catch (err) {
-        toast.warning(err);
-      }
-    })();
-  }, [username]);
-
-  const deletePostHandler = (postId, userToken) => {
-    dispatch(deletePost({ postId: postId, authorization: userToken }));
+  const deletePostHandler = (postId) => {
+    dispatch(deletePost(postId));
     toast("Post deleted");
   };
 
@@ -55,10 +53,6 @@ export const Post = (item) => {
     toast("Post Removed From bookmark");
   };
 
-  const checkBookMarked = live.bookmarks.some(
-    (bookmark) => bookmark._id === _id
-  );
-
   return (
     <div className={`flex flex-column p-s ${styles.post}`}>
       <div className={`flex flex-row ${styles.post_header}`}>
@@ -68,16 +62,16 @@ export const Post = (item) => {
           alt="badge-1"
         />
         <div className={`flex flex-column ${styles.data_info}`}>
-          <span>{userDetails?.firstName}</span>
+          <span>{postUser?.firstName}</span>
           <span className={` ${styles.post_time}`}>{createdAt}</span>
         </div>
         <div className={` ${styles.note_options} pointer`}>
           <IoIosMore size={28} onClick={() => setPostMenu((prev) => !prev)} />
           {postMenu ? (
             <div className={`flex flex-column ${styles.menu}`}>
-              {live.username === userDetails.username ? (
+              {live.username === postUser.username ? (
                 <div>
-                  {checkBookMarked ? (
+                  {live.bookmarks.includes(_id) ? (
                     <MdBookmarkRemove
                       size={25}
                       className={styles.menu_option}
@@ -98,7 +92,7 @@ export const Post = (item) => {
                   />
                   <MdDeleteOutline
                     size={25}
-                    onClick={() => deletePostHandler(_id, userToken)}
+                    onClick={() => deletePostHandler(_id)}
                   />
                 </div>
               ) : (

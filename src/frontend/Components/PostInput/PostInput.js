@@ -21,7 +21,7 @@ export const PostInput = () => {
     };
 
     dispatch(addPost({ postData, authorization: userToken }));
-    textInput.current.value.reset();
+    textInput.current.value = "";
   };
 
   return (

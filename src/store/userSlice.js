@@ -16,14 +16,18 @@ export const getAllusers = createAsyncThunk(
 
 export const followUser = createAsyncThunk(
   "followuser",
-  async ({ followUserId, authorization }, { rejectWithValue }) => {
+  async (
+    { followUserId, authorization, dispatch, updateUser },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axios.post(
         `/api/users/follow/${followUserId}`,
         {},
         { headers: { authorization } }
       );
-      return response;
+      dispatch(updateUser(response.data.user));
+      return response.data;
     } catch (err) {
       rejectWithValue(err.response.data);
     }
@@ -32,13 +36,17 @@ export const followUser = createAsyncThunk(
 
 export const unFollowUser = createAsyncThunk(
   "unfollowuser",
-  async ({ followUserId, authorization }, { rejectWithValue }) => {
+  async (
+    { followUserId, authorization, dispatch, updateUser },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axios.post(
         `/api/users/unfollow/${followUserId}`,
         {},
         { headers: { authorization } }
       );
+      dispatch(updateUser(response.data.user));
       return response;
     } catch (err) {
       rejectWithValue(err.response.data);
@@ -79,9 +87,18 @@ const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(followUser.fulfilled, (state, action) => {
-        state.users = action.payload.data.allUsers;
         state.status = STATUSES.IDLE;
         state.loading = false;
+        state.users = state.users.map((item) =>
+          item.username === action.payload.followUser.username
+            ? action.payload.followUser
+            : item
+        );
+        state.users = state.users.map((item) =>
+          item.username === action.payload.user.username
+            ? action.payload.user
+            : item
+        );
       })
       .addCase(followUser.rejected, (state, action) => {
         state.status = STATUSES.ERROR;
@@ -93,7 +110,16 @@ const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(unFollowUser.fulfilled, (state, action) => {
-        state.users = action.payload.data.allUsers;
+        state.users = state.users.map((item) =>
+          item.username === action.payload.followUser.username
+            ? action.payload.followUser
+            : item
+        );
+        state.users = state.users.map((item) =>
+          item.username === action.payload.user.username
+            ? action.payload.user
+            : item
+        );
         state.status = STATUSES.IDLE;
         state.loading = false;
       })

@@ -99,11 +99,24 @@ const authSlice = createSlice({
     isRegisterd: false,
   },
   reducers: {
+    updateUser(state, action) {
+      state.data.user = action.payload;
+    },
     logout(state, action) {
       state.data = { user: {}, userToken: "" };
       state.message = "";
       state.isLogged = false;
       state.isRegisterd = false;
+      state.status = STATUSES.IDLE;
+    },
+    editProfile(state, action) {
+      state.data.user.pic = action.payload.profileImg;
+      state.status = STATUSES.IDLE;
+    },
+    editProfileInfo(state, action) {
+      state.data.user.username = action.payload.username;
+      state.data.user.link = action.payload.link;
+      state.data.user.bio = action.payload.bio;
       state.status = STATUSES.IDLE;
     },
   },
@@ -183,6 +196,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { editProfile, logout, updateUser, editProfileInfo } =
+  authSlice.actions;
 
 export default authSlice.reducer;

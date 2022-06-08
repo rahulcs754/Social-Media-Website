@@ -2,6 +2,7 @@ import styles from "./FollowCard.module.css";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { followUser, unFollowUser } from "store/userSlice";
+import { updateUser } from "store/authSlice";
 export const FollowCard = ({ user }) => {
   const dispatch = useDispatch();
   const {
@@ -10,20 +11,33 @@ export const FollowCard = ({ user }) => {
   } = useSelector((store) => store.auth);
 
   const followerHandler = (user, userToken) => {
-    dispatch(followUser({ followUserId: user._id, authorization: userToken }));
+    dispatch(
+      followUser({
+        followUserId: user._id,
+        authorization: userToken,
+        dispatch,
+        updateUser,
+      })
+    );
     toast.success(`You followed ${user.firstName} `);
   };
 
   const unfollowerHandler = (user, userToken) => {
     dispatch(
-      unFollowUser({ followUserId: user._id, authorization: userToken })
+      unFollowUser({
+        followUserId: user._id,
+        authorization: userToken,
+        dispatch,
+        updateUser,
+      })
     );
     toast.success(`You unfollowed ${user.firstName} `);
   };
 
-  const checkFollowerUser = live.followers.some(
-    (follow) => follow._id === user._id
-  );
+  const checkFollowerUser = (live) => {
+    console.log(live?.following);
+    return live?.following?.find((item) => item.username === user.username);
+  };
 
   return (
     <div className={`flex flex-row ${styles.follow_header}`}>
@@ -37,7 +51,7 @@ export const FollowCard = ({ user }) => {
           {user.firstName} {user.lastName}
         </span>
 
-        {checkFollowerUser ? (
+        {checkFollowerUser(live) ? (
           <span
             className="flex btn btn-primary justify-content-center pointer"
             onClick={() => unfollowerHandler(user, userToken)}

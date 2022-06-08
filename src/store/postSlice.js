@@ -15,10 +15,11 @@ export const getAllPost = createAsyncThunk(
 );
 
 export const getUserPost = createAsyncThunk(
-  "get/login_postdata",
+  "get/user_posts",
   async (username, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/posts/${username}`);
+      console.log("response check", response);
       return response.data.posts;
     } catch (err) {
       rejectWithValue(err.response.data);
@@ -60,12 +61,14 @@ export const editPost = createAsyncThunk(
 
 export const deletePost = createAsyncThunk(
   "post/delete",
-  async ({ postId, authorization }, { rejectWithValue }) => {
+  async (postId, { getState, rejectWithValue }) => {
     try {
+      const {
+        data: { userToken },
+      } = getState().auth;
       const response = await axios.delete(`/api/posts/${postId}`, {
-        headers: { authorization },
+        headers: { authorization: userToken },
       });
-
       return response.data.posts;
     } catch (err) {
       rejectWithValue(err.response.data);
@@ -113,6 +116,7 @@ const postSlice = createSlice({
   name: "post",
   initialState: {
     allposts: [],
+    liveUserPosts: [],
     posts: [],
     status: STATUSES.IDLE,
     isLoading: false,
@@ -139,15 +143,15 @@ const postSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getUserPost.fulfilled, (state, action) => {
-        state.posts = action.payload;
+        state.liveUserPosts = action.payload;
         state.status = STATUSES.IDLE;
         state.isLoading = false;
       })
 
       .addCase(getUserPost.rejected, (state, action) => {
         state.status = STATUSES.ERROR;
-        state.posts = {};
         state.isLoading = false;
+        state.liveUserPosts = [];
       })
       .addCase(addPost.pending, (state, action) => {
         state.status = STATUSES.LOADING;

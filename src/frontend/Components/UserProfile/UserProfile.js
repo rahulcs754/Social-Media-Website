@@ -49,7 +49,7 @@ export const UserProfile = () => {
   };
 
   return (
-    <div className={`flex flex-column ${styles.profile_box} width-80`}>
+    <div className={`flex  ${styles.profile_box} width-80`}>
       <div className={styles.profile_img}>
         <img
           className="avatar avatar-l avatar-img-square"
@@ -79,7 +79,7 @@ export const UserProfile = () => {
       </button>
       <p className={`${styles.profile_description} mt-xs`}>{live.bio}</p>
       <p className={`${styles.profile_url} mt-xs`}>{live.link}</p>
-      <div className={` flex flex-row mt-m ${styles.user_details}  width-70`}>
+      <div className={` flex flex-row ${styles.user_details}  width-70`}>
         <div className="flex flex-column align-item">
           <span>{live.following.length === 0 ? 0 : live.following.length}</span>
           <span>Following</span>

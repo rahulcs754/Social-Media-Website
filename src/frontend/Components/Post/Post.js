@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getUserById } from "../../../utility/user";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { deletePost } from "store/postSlice";
+import { deletePost, likeOrUnlikePost } from "store/postSlice";
 import { addBookmark, removeBookmark } from "store/authSlice";
 import { IoIosMore } from "react-icons/io";
 import { EditModel } from "../Model/EditModel";
@@ -27,7 +27,7 @@ const getSingleUser = (_id) => {
 
 export const Post = (item) => {
   const dispatch = useDispatch();
-  const { _id, content, username, createdAt } = item;
+  const { _id, content, username, createdAt, likes } = item;
   const [postMenu, setPostMenu] = useState(false);
   const [editmodal, setEditModal] = useState(false);
 
@@ -35,7 +35,7 @@ export const Post = (item) => {
     data: { user: live, userToken },
   } = useSelector((store) => store.auth);
   const { users } = useSelector((store) => store.users);
-
+  const { likeCount, likedBy } = likes;
   const postUser = users.find((item) => item.username === username);
 
   const deletePostHandler = (postId) => {
@@ -51,6 +51,12 @@ export const Post = (item) => {
   const removeBookmarkHandler = (postId, userToken) => {
     dispatch(removeBookmark({ postId: postId, authorization: userToken }));
     toast("Post Removed From bookmark");
+  };
+
+  const LikeOrUnLikeHandler = (post) => {
+    return likedBy.find((item) => item.username === live.username)
+      ? dispatch(likeOrUnlikePost({ type: "dislike", _id: post._id }))
+      : dispatch(likeOrUnlikePost({ type: "like", _id: post._id }));
   };
 
   return (
@@ -95,8 +101,18 @@ export const Post = (item) => {
                     onClick={() => deletePostHandler(_id)}
                   />
                 </div>
+              ) : live.bookmarks.includes(_id) ? (
+                <MdBookmarkRemove
+                  size={25}
+                  className={styles.menu_option}
+                  onClick={() => removeBookmarkHandler(_id, userToken)}
+                />
               ) : (
-                <MdBookmarkBorder size={25} className={styles.menu_option} />
+                <MdBookmarkAdd
+                  size={25}
+                  className={styles.menu_option}
+                  onClick={() => addBookmarkHandler(_id, userToken)}
+                />
               )}
             </div>
           ) : null}
@@ -105,7 +121,12 @@ export const Post = (item) => {
       <div className={`p-s ${styles.post_body}`}>{content}</div>
       <div className={` ${styles.post_footer} space-around`}>
         <p className="space-between flex-row ">
-          1<BiLike size={18} className="pointer" />
+          {likeCount}
+          <BiLike
+            size={18}
+            className="pointer"
+            onClick={() => LikeOrUnLikeHandler(item)}
+          />
         </p>
         <p className="space-between flex-row">
           1<BiCommentDetail size={18} className="pointer" />

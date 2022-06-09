@@ -35,7 +35,6 @@ export const FollowCard = ({ user }) => {
   };
 
   const checkFollowerUser = (live) => {
-    console.log(live?.following);
     return live?.following?.find((item) => item.username === user.username);
   };
 

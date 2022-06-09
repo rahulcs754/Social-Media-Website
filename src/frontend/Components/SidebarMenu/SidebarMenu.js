@@ -16,7 +16,7 @@ export const SidebarMenu = () => {
             <VscHome size={20} />
             Home
           </li>
-          <li className="list-item">
+          <li className="list-item" onClick={() => navigate("/explore")}>
             <VscRemoteExplorer size={20} />
             Explore
           </li>

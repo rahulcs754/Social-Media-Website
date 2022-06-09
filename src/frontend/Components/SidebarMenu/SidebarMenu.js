@@ -20,7 +20,7 @@ export const SidebarMenu = () => {
             <VscRemoteExplorer size={20} />
             Explore
           </li>
-          <li className="list-item">
+          <li className="list-item" onClick={() => navigate("/bookmarks")}>
             <VscBookmark size={20} />
             Bookmarks
           </li>

@@ -1,0 +1,6 @@
+.profile_input_box {
+  margin: 1rem auto auto auto;
+  font-family: "Gudea", sans-serif;
+  border-radius: 8px;
+  border: 2px solid var(--var-blue);
+}

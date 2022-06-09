@@ -1,0 +1,37 @@
+.profile_box {
+  height: 40%;
+  max-width: 80%;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.profile_description,
+.profile_url {
+  font-size: 0.75rem;
+}
+
+.profile_url {
+  color: var(--blue-400);
+}
+
+.user_details {
+  justify-content: space-around;
+  background-color: var(--blue-400);
+  border-radius: 8px;
+  color: var(--mint-white);
+}
+
+.profile_img {
+  position: relative;
+}
+
+.profile_icon_edit {
+  position: absolute;
+  bottom: 3px;
+  right: -5px;
+}
+
+.profile_input_img {
+  display: none;
+}

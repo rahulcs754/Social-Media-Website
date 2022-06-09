@@ -143,52 +143,56 @@ body {
   justify-content: space-between;
 }
 
-.align-item {
-  align-items: center;
+.justify-content-center {
+  justify-content: center;
 }
 
-.video_title {
-  font-size: 1rem;
+.space-around {
+  display: flex;
+  justify-content: space-around;
 }
-.card-info {
-  padding: 0.3rem;
+
+.b {
+  border: 1px solid var(--green-500);
+}
+
+.align-item {
+  align-items: center;
 }
 
 /* this will provide in ci later */
 .grid-container {
   display: grid;
-  grid-auto-columns: 1fr;
+  grid-auto-columns: 20% 60% 20%;
   grid-auto-flow: column;
+  grid-template-areas: "leftArea middleArea rightArea";
 }
 
-/*Playlist css*/
+.middle-part {
+  grid-area: middleArea;
+}
 
-.playlist {
+.left-part {
+  grid-area: leftArea;
+}
+
+.right-part {
+  grid-area: rightArea;
+}
+
+.list {
+  background-color: unset;
+}
+.list-item {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1rem;
+  cursor: pointer;
+  color: var(--blue-400);
 }
 
-.playlist_container {
-  display: inline-block;
-  width: 45%;
-  padding: 0.5rem;
-  border: 1px solid var(--light-black);
-}
-
-.video_card {
-  min-width: 15rem;
-  margin: 0.2rem;
-}
-
-.video_image {
-  height: clamp(9rem, 11rem, 13rem);
-}
-
-.playlist_header {
-  border-bottom: 1px solid var(--dark-blue);
+.modal {
+  background-color: unset;
 }
 
 /* menu for profile */
@@ -248,63 +252,30 @@ body {
   color: var(--light-blue);
 }
 
-.addplaylist {
-  border: 1px solid var(--dark-black);
-  padding: 0.4rem;
-}
-
-.playlistmodel {
-  background-color: transparent;
-}
-
-/*single video page css*/
-
-.video_player_react div div iframe {
-  height: 27rem;
-}
-.video_watch_left {
-  height: inherit;
-  flex-basis: 50rem;
-}
-
-.video_watch_details {
-  margin-bottom: 0.5rem;
-}
-
-.video_watch_right {
-  flex-basis: 30rem;
-}
-
-.video_player_react {
-  height: 29.25rem;
-}
-
-.video_hz_card {
-  min-width: 35rem;
-}
-
-.video_left_text {
-  text-overflow: ellipsis;
-  font-size: 1.3rem;
-}
-
 .text_ellipsis {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   padding: 0 0.1rem;
 }
+
 .right_button_part {
   flex-basis: 30%;
 }
+
 .btn {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 0.8rem;
   border-radius: 5px;
 }
+
 .btn_outline {
   background-color: var(--green-300);
+}
+
+.btn-w-20 {
+  width: 49%;
 }
 
 /* Loader css */

@@ -27,6 +27,7 @@ export const SignupForm = () => {
   }, [isRegisterd, status]);
 
   const signupSchema = Yup.object({
+    username: Yup.string().required("Username is required"),
     firstname: Yup.string().required("First Name is required"),
     lastname: Yup.string().required("Last Name is required"),
     email: Yup.string()
@@ -39,11 +40,12 @@ export const SignupForm = () => {
       .required("Confirm password is required")
       .oneOf([Yup.ref("password")], "Your password do not match."),
   });
-
+  npm;
   return (
     <div className={styles.signup_box}>
       <Formik
         initialValues={{
+          username: "",
           firstname: "",
           lastname: "",
           email: "",
@@ -52,16 +54,15 @@ export const SignupForm = () => {
         }}
         validationSchema={signupSchema}
         onSubmit={(values) => {
-          const { firstname, lastname, email, password } = values;
+          const { username, firstname, lastname, email, password } = values;
           const passObject = {
+            username,
             firstname,
             lastname,
             email,
             password,
           };
           dispatch(SignupUser(passObject));
-          // const userCredentail = { username: email, password };
-          //dispatch(loginCheck(userCredentail));
         }}
       >
         {({ touched, errors }) => (
@@ -74,6 +75,27 @@ export const SignupForm = () => {
               </div>
             </div>
             <Form className={styles.signup_form}>
+              <div className="input-box input-box-icon">
+                <label htmlFor="username" className="label-text">
+                  Username
+                </label>
+                <Field
+                  type="text"
+                  name="username"
+                  className={`field-item mt-2 form-control
+                          ${
+                            touched.username && errors.username
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                />
+
+                <ErrorMessage
+                  component="div"
+                  name="username"
+                  className={styles.error_text}
+                />
+              </div>
               <div className="input-box input-box-icon">
                 <label htmlFor="firstname" className="label-text">
                   First Name

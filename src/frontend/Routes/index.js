@@ -31,7 +31,14 @@ const Routespaths = () => {
           </PrivateRoute>
         }
       ></Route>
-      <Route path="/explore" element={<Explore />}></Route>
+      <Route
+        path="/explore"
+        element={
+          <PrivateRoute>
+            <Explore />
+          </PrivateRoute>
+        }
+      ></Route>
       <Route path="*" element={<NoPageFound />}></Route>
       <Route path="/mock-api" element={<MockAPI />}></Route>
     </Routes>

@@ -45,7 +45,7 @@ const Routespaths = () => {
         path="/bookmarks"
         element={
           <PrivateRoute>
-            <Bookmark />
+            <Bookmarks />
           </PrivateRoute>
         }
       ></Route>

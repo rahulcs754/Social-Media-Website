@@ -5,8 +5,8 @@ import {
   Homepage,
   Profile,
   Explore,
-  Bookmark,
   Comment,
+  Bookmarks,
 } from "../Pages";
 import MockAPI from "../mock-api";
 import { PrivateRoute } from "../Components";
@@ -58,7 +58,22 @@ const Routespaths = () => {
           </PrivateRoute>
         }
       ></Route>
-
+      <Route
+        path="/bookmarks"
+        element={
+          <PrivateRoute>
+            <Bookmarks />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/explore"
+        element={
+          <PrivateRoute>
+            <Explore />
+          </PrivateRoute>
+        }
+      ></Route>
       <Route path="*" element={<NoPageFound />}></Route>
       <Route path="/mock-api" element={<MockAPI />}></Route>
     </Routes>

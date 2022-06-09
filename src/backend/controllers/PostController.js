@@ -159,7 +159,6 @@ export const editPostHandler = function (schema, request) {
     );
   }
 };
-
 /**
  * This handler handles liking a post in the db.
  * send POST Request at /api/posts/like/:postId
@@ -227,14 +226,13 @@ export const dislikePostHandler = function (schema, request) {
     }
     const postId = request.params.postId;
     let post = schema.posts.findBy({ _id: postId }).attrs;
-
-    // if (post.likes.likeCount === 0) {
-    //   return new Response(
-    //     400,
-    //     {},
-    //     { errors: ['Cannot decrement like less than 0.'] }
-    //   );
-    // }
+    if (post.likes.likeCount === 0) {
+      return new Response(
+        400,
+        {},
+        { errors: ["Cannot decrement like less than 0."] }
+      );
+    }
     if (post.likes.dislikedBy.some((currUser) => currUser._id === user._id)) {
       return new Response(
         400,
@@ -242,7 +240,6 @@ export const dislikePostHandler = function (schema, request) {
         { errors: ["Cannot dislike a post that is already disliked. "] }
       );
     }
-
     post.likes.likeCount -= 1;
     const updatedLikedBy = post.likes.likedBy.filter(
       (currUser) => currUser._id !== user._id

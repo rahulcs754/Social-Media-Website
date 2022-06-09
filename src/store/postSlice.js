@@ -78,9 +78,8 @@ export const deletePost = createAsyncThunk(
 
 export const likeOrUnlikePost = createAsyncThunk(
   "post/like",
-  async (post, { rejectWithValue }) => {
+  async (post, { getState, rejectWithValue }) => {
     try {
-      console.log("postdata", post);
       const {
         data: { userToken },
       } = getState().auth;
@@ -89,8 +88,7 @@ export const likeOrUnlikePost = createAsyncThunk(
         {},
         { headers: { authorization: userToken } }
       );
-      console.log("post ", post);
-      console.log("response", response);
+
       return response.data.posts;
     } catch (err) {
       rejectWithValue(err.response.data);

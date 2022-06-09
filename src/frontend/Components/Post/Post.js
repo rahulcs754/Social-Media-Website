@@ -1,6 +1,7 @@
 import styles from "./Post.module.css";
 import { BiLike, BiCommentDetail } from "react-icons/bi";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getUserById } from "../../../utility/user";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,9 +28,10 @@ const getSingleUser = (_id) => {
 
 export const Post = (item) => {
   const dispatch = useDispatch();
-  const { _id, content, username, createdAt, likes } = item;
+  const { _id, content, username, createdAt, likes, comments } = item;
   const [postMenu, setPostMenu] = useState(false);
   const [editmodal, setEditModal] = useState(false);
+  const navigate = useNavigate();
 
   const {
     data: { user: live, userToken },
@@ -128,8 +130,12 @@ export const Post = (item) => {
             onClick={() => LikeOrUnLikeHandler(item)}
           />
         </p>
-        <p className="space-between flex-row">
-          1<BiCommentDetail size={18} className="pointer" />
+        <p
+          className="space-between flex-row"
+          onClick={() => navigate(`/post/${_id}`)}
+        >
+          {comments.length > 0 ? comments.length : 0}
+          <BiCommentDetail size={18} className="pointer" />
         </p>
       </div>
       {editmodal ? <EditModel post={item} setEdit={setEditModal} /> : null}

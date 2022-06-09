@@ -1,0 +1,12 @@
+.comment_box {
+  border: 2px solid var(--blue-400);
+  flex-direction: column;
+}
+
+.comment_input {
+  height: 3rem;
+}
+
+.comment_button {
+  justify-content: flex-end;
+}

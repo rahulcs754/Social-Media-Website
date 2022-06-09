@@ -23,7 +23,9 @@ export const Bookmarks = () => {
         <div className="middle-part">
           <div className="flex flex-column width-80 margin-auto ">
             {isLoading ? <div className="loader"></div> : null}
-
+            {user.bookmarks.length > 0 ? null : (
+              <p className="f-m text-center mt-l">You have not bookmarks yet</p>
+            )}
             {allposts.map((item) =>
               user.bookmarks.includes(item._id) ? (
                 <Post {...item} key={item._id} />

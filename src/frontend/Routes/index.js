@@ -5,6 +5,7 @@ import {
   Homepage,
   Profile,
   Explore,
+  Bookmarks,
 } from "../Pages";
 import MockAPI from "../mock-api";
 import { PrivateRoute } from "../Components";
@@ -28,6 +29,14 @@ const Routespaths = () => {
         element={
           <PrivateRoute>
             <Profile />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/bookmarks"
+        element={
+          <PrivateRoute>
+            <Bookmarks />
           </PrivateRoute>
         }
       ></Route>

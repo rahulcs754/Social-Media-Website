@@ -52,16 +52,15 @@ export const addPostCommentHandler = function (schema, request) {
     const comment = {
       _id: uuid(),
       ...commentData,
-      user: user,
-      replies: [],
-      votes: { upvotedBy: [] },
+      username: user.username,
+      votes: { upvotedBy: [], downvotedBy: [] },
       createdAt: formatDate(),
       updatedAt: formatDate(),
     };
     const post = schema.posts.findBy({ _id: postId }).attrs;
     post.comments.push(comment);
     this.db.posts.update({ _id: postId }, post);
-    return new Response(201, {}, { posts: this.db.posts });
+    return new Response(201, {}, { comments: post.comments });
   } catch (error) {
     return new Response(
       500,
@@ -98,15 +97,20 @@ export const editPostCommentHandler = function (schema, request) {
     const commentIndex = post.comments.findIndex(
       (comment) => comment._id === commentId
     );
-
+    if (post.comments[commentIndex].username !== user.username) {
+      return new Response(
+        400,
+        {},
+        { errors: ["Cannot edit a comment doesn't belong to the User."] }
+      );
+    }
     post.comments[commentIndex] = {
       ...post.comments[commentIndex],
       ...commentData,
       updatedAt: formatDate(),
     };
-
     this.db.posts.update({ _id: postId }, post);
-    return new Response(201, {}, { posts: this.db.posts });
+    return new Response(201, {}, { comments: post.comments });
   } catch (error) {
     return new Response(
       500,
@@ -139,12 +143,24 @@ export const deletePostCommentHandler = function (schema, request) {
     }
     const { postId, commentId } = request.params;
     const post = schema.posts.findBy({ _id: postId }).attrs;
-
+    const commentIndex = post.comments.findIndex(
+      (comment) => comment._id === commentId
+    );
+    if (
+      post.comments[commentIndex].username !== user.username &&
+      post.username !== user.username
+    ) {
+      return new Response(
+        400,
+        {},
+        { errors: ["Cannot delete a comment doesn't belong to the User."] }
+      );
+    }
     post.comments = post.comments.filter(
       (comment) => comment._id !== commentId
     );
     this.db.posts.update({ _id: postId }, post);
-    return new Response(201, {}, { posts: this.db.posts });
+    return new Response(201, {}, { comments: post.comments });
   } catch (error) {
     return new Response(
       500,
@@ -176,22 +192,28 @@ export const upvotePostCommentHandler = function (schema, request) {
       );
     }
     const { postId, commentId } = request.params;
-    const post = schema.posts.findBy({ _id: postId }).attrs;
-
     const commentIndex = post.comments.findIndex(
       (comment) => comment._id === commentId
     );
+    const post = schema.posts.findBy({ _id: postId }).attrs;
+
     if (
       post.comments[commentIndex].votes.upvotedBy.some(
-        (us) => us._id === user._id
+        (currUser) => currUser._id === user._id
       )
     ) {
-      post.comments[commentIndex].votes.upvotedBy = post.comments[
-        commentIndex
-      ].votes.upvotedBy.filter((us) => us._id !== user._id);
-    } else post.comments[commentIndex].votes.upvotedBy.push(user);
+      return new Response(
+        400,
+        {},
+        { errors: ["Cannot upvote a post that is already upvoted. "] }
+      );
+    }
+    post.comments[commentIndex].votes.downvotedBy = post.comments[
+      commentIndex
+    ].votes.downvotedBy.filter((currUser) => currUser._id !== user._id);
+    post.comments[commentIndex].votes.upvotedBy.push(user);
     this.db.posts.update({ _id: postId }, { ...post, updatedAt: formatDate() });
-    return new Response(201, {}, { posts: this.db.posts });
+    return new Response(201, {}, { comments: post.comments });
   } catch (error) {
     return new Response(
       500,
@@ -207,3 +229,51 @@ export const upvotePostCommentHandler = function (schema, request) {
  * This handler handles downvoting a comment of a post in the db.
  * send POST Request at /api/comments/downvote/:postId/:commentId
  * */
+
+export const downvotePostCommentHandler = function (schema, request) {
+  const user = requiresAuth.call(this, request);
+  try {
+    if (!user) {
+      return new Response(
+        404,
+        {},
+        {
+          errors: [
+            "The username you entered is not Registered. Not Found error",
+          ],
+        }
+      );
+    }
+    const { postId, commentId } = request.params;
+    const commentIndex = post.comments.findIndex(
+      (comment) => comment._id === commentId
+    );
+    const post = schema.posts.findBy({ _id: postId }).attrs;
+
+    if (
+      post.comments[commentIndex].votes.downvotedBy.some(
+        (currUser) => currUser._id === user._id
+      )
+    ) {
+      return new Response(
+        400,
+        {},
+        { errors: ["Cannot downvote a post that is already downvoted. "] }
+      );
+    }
+    post.comments[commentIndex].votes.upvotedBy = post.comments[
+      commentIndex
+    ].votes.upvotedBy.filter((currUser) => currUser._id !== user._id);
+    post.comments[commentIndex].votes.downvotedBy.push(user);
+    this.db.posts.update({ _id: postId }, { ...post, updatedAt: formatDate() });
+    return new Response(201, {}, { comments: post.comments });
+  } catch (error) {
+    return new Response(
+      500,
+      {},
+      {
+        error,
+      }
+    );
+  }
+};

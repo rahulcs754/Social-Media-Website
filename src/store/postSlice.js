@@ -19,7 +19,6 @@ export const getUserPost = createAsyncThunk(
   async (username, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/posts/${username}`);
-      console.log("response check", response);
       return response.data.posts;
     } catch (err) {
       rejectWithValue(err.response.data);
@@ -76,33 +75,17 @@ export const deletePost = createAsyncThunk(
   }
 );
 
-export const likePost = createAsyncThunk(
+export const likeOrUnlikePost = createAsyncThunk(
   "post/like",
-  async ({ postId, authorization }, { rejectWithValue }) => {
+  async (post, { getState, rejectWithValue }) => {
     try {
+      const {
+        data: { userToken },
+      } = getState().auth;
       const response = await axios.post(
-        `/api/posts/like/${postId}`,
+        `/api/posts/${post.type}/${post._id}`,
         {},
-        { headers: { authorization } }
-      );
-
-      return response.data.posts;
-    } catch (err) {
-      rejectWithValue(err.response.data);
-    }
-  }
-);
-
-export const disLikePost = createAsyncThunk(
-  "post/dislike",
-  async ({ postId, authorization }, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(
-        `/api/posts/dislike/${postId}`,
-        {},
-        {
-          headers: { authorization },
-        }
+        { headers: { authorization: userToken } }
       );
 
       return response.data.posts;
@@ -193,6 +176,20 @@ const postSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(editPost.rejected, (state, action) => {
+        state.status = STATUSES.ERROR;
+        state.posts = {};
+        state.isLoading = false;
+      })
+      .addCase(likeOrUnlikePost.pending, (state, action) => {
+        state.status = STATUSES.LOADING;
+        state.isLoading = true;
+      })
+      .addCase(likeOrUnlikePost.fulfilled, (state, action) => {
+        state.allposts = action.payload;
+        state.status = STATUSES.IDLE;
+        state.isLoading = false;
+      })
+      .addCase(likeOrUnlikePost.rejected, (state, action) => {
         state.status = STATUSES.ERROR;
         state.posts = {};
         state.isLoading = false;

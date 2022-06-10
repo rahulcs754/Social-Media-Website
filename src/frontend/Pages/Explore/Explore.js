@@ -1,6 +1,6 @@
 import { Nav, Post, Follow, SidebarMenu } from "../../Components";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPost } from "../../../store/postSlice";
+import { getAllPost, getUserPost } from "../../../store/postSlice";
 import { useEffect } from "react";
 
 export const Explore = () => {
@@ -14,7 +14,6 @@ export const Explore = () => {
   useEffect(() => {
     dispatch(getAllPost());
   }, []);
-
   return (
     <>
       <Nav />
@@ -24,9 +23,17 @@ export const Explore = () => {
           <div className="flex flex-column width-80 margin-auto ">
             {isLoading ? <div className="loader"></div> : null}
 
-            {allposts.map((item) => (
-              <Post {...item} key={item._id} />
-            ))}
+            {allposts.length > 0 ? null : (
+              <p className="f-m text-center mt-l">Not Found</p>
+            )}
+
+            {allposts.map((item) =>
+              user.bookmarks.includes(item._id) ? (
+                <Post {...item} key={item._id} />
+              ) : (
+                <Post {...item} key={item._id} />
+              )
+            )}
           </div>
         </div>
 

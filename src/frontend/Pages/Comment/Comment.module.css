@@ -1,0 +1,43 @@
+.post {
+  width: 100%;
+  border: 2px solid var(--blue-400);
+  margin: 0.5rem auto;
+  font-family: Nunito;
+  border-radius: 8px;
+}
+
+.post_header {
+  height: 3rem;
+}
+
+.post_time {
+  color: var(--light-black);
+  font-size: 0.7rem;
+}
+
+.post_body {
+  font-size: 0.9rem;
+}
+
+.post_footer {
+  font-size: 0.9rem;
+}
+
+.note_options {
+  min-width: 3.5rem;
+  position: relative;
+  left: 2rem;
+}
+
+.menu {
+  position: absolute;
+  right: 1.6rem;
+  background-color: var(--green-300);
+  border-radius: 8px;
+  width: 2rem;
+  padding: 5px;
+}
+
+.data_info {
+  width: 80%;
+}

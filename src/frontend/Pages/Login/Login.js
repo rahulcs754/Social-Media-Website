@@ -16,7 +16,6 @@ export const Login = () => {
   // check user is logged in or not then send to home page
   useEffect(() => {
     if (isLogged) {
-      toast.success("You have successfully logged in");
       navigate("/homepage");
     }
 
@@ -32,12 +31,12 @@ export const Login = () => {
       password: "test123",
     };
     dispatch(loginCheck(userCredentail));
+
+    toast.success("You have successfully logged in");
   };
 
   const LoginSchema = Yup.object({
-    email: Yup.string()
-      .email("Invalid email address format")
-      .required("Email is required"),
+    email: Yup.string().required("Email is required"),
     password: Yup.string()
       .min(3, "Password must be 3 characters at minimum")
       .required("Password is required"),
@@ -51,6 +50,7 @@ export const Login = () => {
         onSubmit={({ email, password }) => {
           const userCredentail = { username: email, password };
           dispatch(loginCheck(userCredentail));
+          toast.success("You have successfully logged in");
         }}
       >
         {({ touched, errors }) => (
@@ -65,10 +65,10 @@ export const Login = () => {
             <Form className={styles.login_form}>
               <div className="input-box input-box-icon">
                 <label htmlFor="email" className="label-text">
-                  Email
+                  Username
                 </label>
                 <Field
-                  type="email"
+                  type="text"
                   name="email"
                   placeholder="Enter email"
                   className={`field-item mt-2 form-control

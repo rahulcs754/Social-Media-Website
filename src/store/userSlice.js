@@ -2,6 +2,26 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { STATUSES } from "./authSlice";
 import axios from "axios";
 
+export const editUser = createAsyncThunk(
+  "user/editUser",
+  async (userData, { getState, rejectWithValue }) => {
+    try {
+      const {
+        data: { userToken },
+      } = getState().auth;
+      const res = await axios.post(
+        "/api/users/edit",
+        { userData },
+        { headers: { authorization: userToken } }
+      );
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      rejectWithValue(err);
+    }
+  }
+);
+
 export const getAllusers = createAsyncThunk(
   "get_alluser",
   async (_, { rejectWithValue }) => {
@@ -62,7 +82,14 @@ const userSlice = createSlice({
     message: "",
     status: STATUSES.IDLE,
   },
-  reducers: {},
+  reducers: {
+    allUsereditProfile(state, action) {
+      const { id, profileImg } = action.payload;
+      state.users = state.users.map((user) =>
+        user._id === id ? { ...user, pic: profileImg } : user
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllusers.pending, (state, action) => {
@@ -131,4 +158,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { allUsereditProfile } = userSlice.actions;
 export default userSlice.reducer;

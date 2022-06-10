@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { getUserPost } from "store/postSlice";
 import { editProfile } from "store/authSlice";
 import { BiEdit } from "react-icons/bi";
+import { toast } from "react-toastify";
+import { allUsereditProfile, editUser } from "store/userSlice";
 
 export const UserProfile = () => {
   const dispatch = useDispatch();
@@ -12,7 +14,6 @@ export const UserProfile = () => {
   const {
     data: { user: live, userToken },
   } = useSelector((state) => state.auth);
-  const res = useSelector((state) => state.post);
 
   useEffect(() => {
     (() => {
@@ -24,7 +25,7 @@ export const UserProfile = () => {
 
   const uploadImage = async (image) => {
     if (Math.round(image.size / 1024000) > 2)
-      console.log("Image cannot exceed 2mb");
+      toast.warning("Image cannot exceed 2mb");
     else {
       const data = new FormData();
       data.append("file", image);
@@ -39,17 +40,22 @@ export const UserProfile = () => {
       )
         .then((response) => response.json())
         .then((json) => {
-          console.log("check", json);
-          dispatch(editProfile({ profileImg: json.url }));
+          dispatch(
+            editProfile({
+              profileImg: json.url,
+            })
+          );
+          dispatch(allUsereditProfile({ profileImg: json.url, id: live._id }));
+          editUser(live);
         })
         .catch((error) => {
-          console.error(error);
+          toast.warning(error);
         });
     }
   };
 
   return (
-    <div className={`flex flex-column ${styles.profile_box} width-80`}>
+    <div className={`flex  ${styles.profile_box} width-80`}>
       <div className={styles.profile_img}>
         <img
           className="avatar avatar-l avatar-img-square"
@@ -79,7 +85,7 @@ export const UserProfile = () => {
       </button>
       <p className={`${styles.profile_description} mt-xs`}>{live.bio}</p>
       <p className={`${styles.profile_url} mt-xs`}>{live.link}</p>
-      <div className={` flex flex-row mt-m ${styles.user_details}  width-70`}>
+      <div className={` flex flex-row ${styles.user_details}  width-70`}>
         <div className="flex flex-column align-item">
           <span>{live.following.length === 0 ? 0 : live.following.length}</span>
           <span>Following</span>

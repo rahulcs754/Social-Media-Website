@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { addPost } from "../../../store/postSlice";
+import { toast } from "react-toastify";
 export const PostInput = () => {
   const dispatch = useDispatch();
   const textInput = useRef();
@@ -12,16 +13,20 @@ export const PostInput = () => {
   } = useSelector((state) => state.auth);
 
   const addHandler = () => {
-    const postData = {
-      _id: uuid(),
-      content: textInput.current.value,
-      username: user.username,
-      comments: [],
-      pic: "",
-    };
+    if (textInput.current.value.length > 0) {
+      const postData = {
+        _id: uuid(),
+        content: textInput.current.value,
+        username: user.username,
+        comments: [],
+        pic: "",
+      };
 
-    dispatch(addPost({ postData, authorization: userToken }));
-    textInput.current.value = "";
+      dispatch(addPost({ postData, authorization: userToken }));
+      textInput.current.value = "";
+    } else {
+      toast.warning("Please Any Message");
+    }
   };
 
   return (
@@ -45,12 +50,6 @@ export const PostInput = () => {
             </div>
           </div>
         </form>
-      </div>
-      <div className={`${styles.note_input_box}  width-80`}>
-        <div className="flex flex-row space-around pointer m-xs">
-          <span>Trending</span>
-          <span>Latest</span>
-        </div>
       </div>
     </>
   );

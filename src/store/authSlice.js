@@ -110,7 +110,8 @@ const authSlice = createSlice({
       state.status = STATUSES.IDLE;
     },
     editProfile(state, action) {
-      state.data.user.pic = action.payload.profileImg;
+      const { profileImg } = action.payload;
+      state.data.user.pic = profileImg;
       state.status = STATUSES.IDLE;
     },
     editProfileInfo(state, action) {
@@ -138,7 +139,6 @@ const authSlice = createSlice({
         state.status = STATUSES.ERROR;
         state.message = "Incorrect login or password!";
         state.data = {};
-        state.isLogged = false;
       })
       .addCase(SignupUser.pending, (state, action) => {
         state.status = STATUSES.LOADING;

@@ -1,6 +1,6 @@
 import styles from "./Post.module.css";
 import { BiLike, BiCommentDetail } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserById } from "../../../utility/user";
 import { toast } from "react-toastify";
@@ -14,17 +14,7 @@ import {
   MdDeleteOutline,
   MdEdit,
   MdBookmarkRemove,
-  MdBookmarkBorder,
 } from "react-icons/md";
-
-const getSingleUser = (_id) => {
-  try {
-    const res = getUserById(_id);
-    setUserDetails(res?.data?.user);
-  } catch (err) {
-    toast.warning(err);
-  }
-};
 
 export const Post = (item) => {
   const dispatch = useDispatch();
@@ -66,8 +56,12 @@ export const Post = (item) => {
       <div className={`flex flex-row ${styles.post_header}`}>
         <img
           className="badge-img profile_icon_size"
-          src="https://picsum.photos/200"
+          src={postUser.pic}
           alt="badge-1"
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src = "https://picsum.photos/200";
+          }}
         />
         <div className={`flex flex-column ${styles.data_info}`}>
           <span>{postUser?.firstName}</span>

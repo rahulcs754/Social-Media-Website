@@ -19,7 +19,6 @@ export const getUserPost = createAsyncThunk(
   async (username, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/posts/${username}`);
-      console.log("response check", response);
       return response.data.posts;
     } catch (err) {
       rejectWithValue(err.response.data);

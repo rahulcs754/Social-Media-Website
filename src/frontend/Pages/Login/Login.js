@@ -16,7 +16,6 @@ export const Login = () => {
   // check user is logged in or not then send to home page
   useEffect(() => {
     if (isLogged) {
-      toast.success("You have successfully logged in");
       navigate("/homepage");
     }
 
@@ -32,6 +31,8 @@ export const Login = () => {
       password: "test123",
     };
     dispatch(loginCheck(userCredentail));
+
+    toast.success("You have successfully logged in");
   };
 
   const LoginSchema = Yup.object({
@@ -49,6 +50,7 @@ export const Login = () => {
         onSubmit={({ email, password }) => {
           const userCredentail = { username: email, password };
           dispatch(loginCheck(userCredentail));
+          toast.success("You have successfully logged in");
         }}
       >
         {({ touched, errors }) => (

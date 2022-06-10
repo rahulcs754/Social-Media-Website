@@ -91,47 +91,23 @@ export const Comment = () => {
                   />
                   {postMenu ? (
                     <div className={`flex flex-column ${styles.menu}`}>
-                      {live.username === postUser.username ? (
-                        <div>
-                          {live.bookmarks.includes(_id) ? (
-                            <MdBookmarkRemove
-                              size={25}
-                              className={styles.menu_option}
-                              onClick={() =>
-                                removeBookmarkHandler(_id, userToken)
-                              }
-                            />
-                          ) : (
-                            <MdBookmarkAdd
-                              size={25}
-                              className={styles.menu_option}
-                              onClick={() => addBookmarkHandler(_id, userToken)}
-                            />
-                          )}
-
-                          <MdEdit
+                      <div>
+                        {live.bookmarks.includes(_id) ? (
+                          <MdBookmarkRemove
                             size={25}
                             className={styles.menu_option}
-                            onClick={() => setEditModal(!editmodal)}
+                            onClick={() =>
+                              removeBookmarkHandler(_id, userToken)
+                            }
                           />
-                          <MdDeleteOutline
+                        ) : (
+                          <MdBookmarkAdd
                             size={25}
-                            onClick={() => deletePostHandler(_id)}
+                            className={styles.menu_option}
+                            onClick={() => addBookmarkHandler(_id, userToken)}
                           />
-                        </div>
-                      ) : live.bookmarks.includes(_id) ? (
-                        <MdBookmarkRemove
-                          size={25}
-                          className={styles.menu_option}
-                          onClick={() => removeBookmarkHandler(_id, userToken)}
-                        />
-                      ) : (
-                        <MdBookmarkAdd
-                          size={25}
-                          className={styles.menu_option}
-                          onClick={() => addBookmarkHandler(_id, userToken)}
-                        />
-                      )}
+                        )}
+                      </div>
                     </div>
                   ) : null}
                 </div>

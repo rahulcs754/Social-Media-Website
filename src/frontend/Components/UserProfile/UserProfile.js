@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { getUserPost } from "store/postSlice";
 import { editProfile } from "store/authSlice";
 import { BiEdit } from "react-icons/bi";
+import { toast } from "react-toastify";
+import { allUsereditProfile, editUser } from "store/userSlice";
 
 export const UserProfile = () => {
   const dispatch = useDispatch();
@@ -12,7 +14,6 @@ export const UserProfile = () => {
   const {
     data: { user: live, userToken },
   } = useSelector((state) => state.auth);
-  const res = useSelector((state) => state.post);
 
   useEffect(() => {
     (() => {
@@ -24,7 +25,7 @@ export const UserProfile = () => {
 
   const uploadImage = async (image) => {
     if (Math.round(image.size / 1024000) > 2)
-      console.log("Image cannot exceed 2mb");
+      toast.warning("Image cannot exceed 2mb");
     else {
       const data = new FormData();
       data.append("file", image);
@@ -39,11 +40,16 @@ export const UserProfile = () => {
       )
         .then((response) => response.json())
         .then((json) => {
-          console.log("check", json);
-          dispatch(editProfile({ profileImg: json.url }));
+          dispatch(
+            editProfile({
+              profileImg: json.url,
+            })
+          );
+          dispatch(allUsereditProfile({ profileImg: json.url, id: live._id }));
+          editUser(live);
         })
         .catch((error) => {
-          console.error(error);
+          toast.warning(error);
         });
     }
   };

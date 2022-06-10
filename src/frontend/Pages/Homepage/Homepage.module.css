@@ -1,0 +1,15 @@
+.note_input_box {
+  margin: 1rem auto auto auto;
+  font-family: "Gudea", sans-serif;
+  border-radius: 8px;
+  border: 1px solid var(--var-blue);
+}
+@media screen and (max-width: 769px) {
+  .note_input_box {
+    width: 90%;
+    margin: 0 auto;
+    font-family: "Gudea", sans-serif;
+    border-radius: 8px;
+    border: 1px solid var(--var-blue);
+  }
+}

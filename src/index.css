@@ -278,6 +278,9 @@ body {
   width: 49%;
 }
 
+.flex-column-reverse {
+  flex-direction: column-reverse;
+}
 /* Loader css */
 
 .loader {

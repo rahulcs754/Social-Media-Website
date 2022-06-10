@@ -7,7 +7,7 @@
 <p align="center">
     Connect is Social Media website. Where people connect with other peoples. It is open source project. 
   <br>
-  <a href="https://connect-with-friends.vercel.app/"><strong>Connect »</strong></a>
+  <a href="https://connect-with-friends.vercel.app/"><strong>Explore »</strong></a>
   <br>
 </p>
 

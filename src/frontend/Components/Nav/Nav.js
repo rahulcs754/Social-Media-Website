@@ -19,28 +19,6 @@ export const Nav = () => {
             {isLogged ? (
               <ul className={`header-nav ${styles.header_nav_reset}`}>
                 <li>
-                  <NavLink
-                    className={({ isActive }) =>
-                      isActive ? "active_url" : "normal"
-                    }
-                    to="/"
-                  >
-                    Home
-                  </NavLink>
-                </li>
-
-                <li>
-                  <NavLink
-                    className={({ isActive }) =>
-                      isActive ? "active_url" : "normal"
-                    }
-                    to="/explore/all"
-                  >
-                    Explore
-                  </NavLink>
-                </li>
-
-                <li>
                   <div className="badge" onClick={() => setShowmenu(!showmenu)}>
                     <img
                       className="badge-img profile_icon_size"

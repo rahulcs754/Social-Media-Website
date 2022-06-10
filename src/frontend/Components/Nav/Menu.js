@@ -14,9 +14,6 @@ export const Menu = () => {
     <div className="menu">
       <h3>Welcome {data.user.firstName}</h3>
       <ul>
-        <li>
-          <Link to="/explore">Expore</Link>
-        </li>
         <li onClick={logoutHandler}>
           <a href="#">Logout</a>
         </li>

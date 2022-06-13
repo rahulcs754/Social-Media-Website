@@ -40,7 +40,7 @@ export const SignupForm = () => {
       .required("Confirm password is required")
       .oneOf([Yup.ref("password")], "Your password do not match."),
   });
-  npm;
+
   return (
     <div className={styles.signup_box}>
       <Formik

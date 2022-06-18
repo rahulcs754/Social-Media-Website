@@ -1,20 +1,8 @@
 import styles from "./CommentList.module.css";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import dayjs from "dayjs";
-import { IoIosMore } from "react-icons/io";
-import {
-  MdBookmarkAdd,
-  MdDeleteOutline,
-  MdEdit,
-  MdBookmarkRemove,
-} from "react-icons/md";
+
+import { useSelector } from "react-redux";
+
 export const CommentList = () => {
-  const [postMenu, setPostMenu] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { comments, loading } = useSelector((state) => state.comments);
 
   return (
@@ -27,22 +15,7 @@ export const CommentList = () => {
                 <span>@{comment.username}</span>
                 <span className={` ${styles.post_time}`}>{comment.text}</span>
               </div>
-              <div className={` ${styles.note_options} pointer`}>
-                <IoIosMore
-                  size={28}
-                  onClick={() => setPostMenu((prev) => !prev)}
-                />
-                {postMenu ? (
-                  <div className={`flex flex-column ${styles.menu}`}>
-                    <div>
-                      <MdDeleteOutline
-                        size={25}
-                        className={styles.menu_option}
-                      />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
+              <div className={` ${styles.note_options} pointer`}></div>
             </div>
           </div>
         );

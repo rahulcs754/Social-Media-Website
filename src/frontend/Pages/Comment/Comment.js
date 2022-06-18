@@ -17,17 +17,14 @@ import { addBookmark, removeBookmark } from "store/authSlice";
 import { IoIosMore } from "react-icons/io";
 import { EditModel } from "frontend/Components/Model/EditModel";
 
-import {
-  MdBookmarkAdd,
-  MdDeleteOutline,
-  MdEdit,
-  MdBookmarkRemove,
-} from "react-icons/md";
+import { MdBookmarkAdd, MdBookmarkRemove } from "react-icons/md";
+import { useEffect } from "react";
 
 export const Comment = () => {
   const { id } = useParams();
 
   const dispatch = useDispatch();
+  const [currPost, setCurrPost] = useState({});
   const [postMenu, setPostMenu] = useState(false);
   const [editmodal, setEditModal] = useState(false);
   const navigate = useNavigate();
@@ -37,23 +34,15 @@ export const Comment = () => {
   } = useSelector((store) => store.auth);
   const { allposts } = useSelector((state) => state.post);
   const { users } = useSelector((store) => store.users);
+  const { comments } = useSelector((store) => store.comments);
 
-  const postItem = allposts?.find((item) => item._id === id);
+  useEffect(() => {
+    setCurrPost(allposts?.find((item) => item._id === id));
+  }, [allposts, comments]);
 
-  const { _id, content, username, createdAt, likes, comments } = postItem;
+  const { _id, content, username, createdAt, likes } = currPost;
 
-  const { likeCount, likedBy } = likes;
   const postUser = users.find((item) => item.username === username);
-
-  const deletePostHandler = (postId) => {
-    dispatch(deletePost(postId));
-    toast("Post deleted");
-  };
-
-  const addBookmarkHandler = (postId, userToken) => {
-    dispatch(addBookmark({ postId: postId, authorization: userToken }));
-    toast("Post Added into bookmark");
-  };
 
   const removeBookmarkHandler = (postId, userToken) => {
     dispatch(removeBookmark({ postId: postId, authorization: userToken }));
@@ -61,7 +50,7 @@ export const Comment = () => {
   };
 
   const LikeOrUnLikeHandler = (post) => {
-    return likedBy.find((item) => item.username === live.username)
+    return likes?.likedBy.find((item) => item.username === live.username)
       ? dispatch(likeOrUnlikePost({ type: "dislike", _id: post._id }))
       : dispatch(likeOrUnlikePost({ type: "like", _id: post._id }));
   };
@@ -89,53 +78,32 @@ export const Comment = () => {
                     size={28}
                     onClick={() => setPostMenu((prev) => !prev)}
                   />
-                  {postMenu ? (
-                    <div className={`flex flex-column ${styles.menu}`}>
-                      <div>
-                        {live.bookmarks.includes(_id) ? (
-                          <MdBookmarkRemove
-                            size={25}
-                            className={styles.menu_option}
-                            onClick={() =>
-                              removeBookmarkHandler(_id, userToken)
-                            }
-                          />
-                        ) : (
-                          <MdBookmarkAdd
-                            size={25}
-                            className={styles.menu_option}
-                            onClick={() => addBookmarkHandler(_id, userToken)}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  ) : null}
                 </div>
               </div>
               <div className={`p-s ${styles.post_body}`}>{content}</div>
               <div className={` ${styles.post_footer} space-around`}>
                 <p className="space-between flex-row ">
-                  {likeCount}
+                  {likes?.likeCount}
                   <BiLike
                     size={18}
                     className="pointer"
-                    onClick={() => LikeOrUnLikeHandler(item)}
+                    onClick={() => LikeOrUnLikeHandler(currPost)}
                   />
                 </p>
                 <p
                   className="space-between flex-row"
                   onClick={() => navigate(`/post/${_id}`)}
                 >
-                  {comments.length > 0 ? comments.length : 0}
+                  {comments?.length > 0 ? comments.length : 0}
                   <BiCommentDetail size={18} className="pointer" />
                 </p>
               </div>
 
               {editmodal ? (
-                <EditModel post={item} setEdit={setEditModal} />
+                <EditModel post={currPost} setEdit={setEditModal} />
               ) : null}
             </div>
-            <Commentbox post={postItem} />
+            <Commentbox post={currPost} />
           </div>
         </div>
 

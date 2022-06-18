@@ -13,6 +13,10 @@ export const Login = () => {
   const { status, message, isLogged } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  if (isLogged) {
+    navigate("/homepage");
+  }
+
   // check user is logged in or not then send to home page
   useEffect(() => {
     if (isLogged) {
